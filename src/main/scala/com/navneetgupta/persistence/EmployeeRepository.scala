@@ -1,5 +1,8 @@
 package com.navneetgupta.persistence
 
-trait EmployeeRepository[F[_]] {
+import com.navneetgupta.model.{Employee, EmployeeId}
 
+trait EmployeeRepository[F[_]] {
+  def get(id: EmployeeId): F[Option[Employee]]
+  def save(employee: Employee): F[Option[Employee]]
 }

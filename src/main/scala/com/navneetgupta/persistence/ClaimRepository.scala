@@ -1,5 +1,8 @@
 package com.navneetgupta.persistence
 
-trait ClaimRepository[F[_]] {
+import com.navneetgupta.model.{Claim, ClaimId}
 
+trait ClaimRepository[F[_]] {
+  def get(id: ClaimId): F[Option[Claim]]
+  def save(claim: Claim): F[Option[Claim]]
 }

@@ -16,7 +16,6 @@ sealed trait Claim {
 final case class PendingClaim(id: ClaimId,
                               employee: Employee,
                               expenses: NonEmptyList[Expense]) extends Claim
-
 object Claim {
   object implicits {
     import scala.language.implicitConversions
