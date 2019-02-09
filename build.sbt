@@ -26,6 +26,7 @@ libraryDependencies ++= {
   Seq(
     "org.scalactic"   %% "scalactic"           % "3.0.5",
     "org.typelevel"   %% "cats-core"           % catVersion,
+    "org.typelevel"   %% "squants"             % "1.4.0",
     "org.tpolecat"    %% "doobie-core"         % doobieVersion,
     "org.tpolecat"    %% "doobie-hikari"       % doobieVersion,
     "org.tpolecat"    %% "doobie-postgres"     % "0.6.0",
