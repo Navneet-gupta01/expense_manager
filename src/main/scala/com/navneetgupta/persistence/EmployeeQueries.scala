@@ -7,13 +7,13 @@ import doobie.util.query.Query0
 
 
 object EmployeeQueries {
-  def insert(employee: Employee): Update0 =
+  def insertQuery(employee: Employee): Update0 =
     sql"""INSERT INTO employees (id, name, surname) VALUES (${employee.id}, ${employee.name}, ${employee.surname})""".update
 
-  def fetch(id: EmployeeId): Query0[Employee] =
+  def fetchQuery(id: EmployeeId): Query0[Employee] =
     sql"""SELECT * from employees where id= $id""".query[Employee]
 
-  def count(expenseSheet: ExpenseSheet) : Query0[Long] =
+  def countQuery(expenseSheet: ExpenseSheet) : Query0[Long] =
     sql"""SELECT count(*) from employees where id = ${expenseSheet.employee.id}""".query[Long]
 
 }
