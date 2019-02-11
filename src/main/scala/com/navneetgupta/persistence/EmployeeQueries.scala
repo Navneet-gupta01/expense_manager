@@ -13,7 +13,7 @@ object EmployeeQueries {
   def fetchQuery(id: EmployeeId): Query0[Employee] =
     sql"""SELECT * from employees where id= $id""".query[Employee]
 
-  def countQuery(expenseSheet: ExpenseSheet) : Query0[Long] =
+  def countEmployeeQuery(expenseSheet: ExpenseSheet) : Query0[Long] =
     sql"""SELECT count(*) from employees where id = ${expenseSheet.employee.id}""".query[Long]
 
 }

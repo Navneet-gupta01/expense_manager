@@ -10,6 +10,8 @@ import doobie.implicits._
 
 class EmployeeRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends EmployeeRepository.Handler[F] {
   import EmployeeQueries._
+  import com.navneetgupta.persistence.DoobieCustomMapping.implicits._
+
   override def get(id: EmployeeId): F[Option[Employee]] =
     fetchQuery(id)
       .option
@@ -22,7 +24,7 @@ class EmployeeRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends 
       .transact(T)
 
   override def count(expenseSheet: ExpenseSheet): F[Long] =
-    countQuery(expenseSheet)
+    countEmployeeQuery(expenseSheet)
       .unique
       .transact(T)
 }

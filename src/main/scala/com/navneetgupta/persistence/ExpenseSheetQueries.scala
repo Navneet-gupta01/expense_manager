@@ -21,7 +21,7 @@ object ExpenseSheetQueries {
          expenses = ${expenseSheet.expenses} where id = ${expenseSheet.id}
        """.update
 
-  def countQuery(expenseSheet: ExpenseSheet): Query0[Long] =
+  def countSheetQuery(expenseSheet: ExpenseSheet): Query0[Long] =
     sql"""SELECT count(*) from expensesheets where id = ${expenseSheet.id}""".query[Long]
 
   private def expenseSheetType(expenseSheet: ExpenseSheet): ExpenseSheetType = expenseSheet match {

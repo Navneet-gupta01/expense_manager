@@ -9,6 +9,7 @@ import doobie.implicits._
 class ClaimRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends ClaimRepository.Handler[F]{
 
   import com.navneetgupta.persistence.ClaimQueries._
+  import com.navneetgupta.persistence.DoobieCustomMapping.implicits._
 
   override def save(claim: Claim): F[Option[Claim]] =
     insertQuery(claim).

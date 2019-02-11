@@ -6,5 +6,7 @@ import freestyle.tagless.tagless
 @tagless(true)
 trait ExpenseSheetRepository[F[_]] {
   def get(id: ExpenseSheetId): F[Option[ExpenseSheet]]
+  def insert(expenseSheet: ExpenseSheet): F[Option[ExpenseSheet]]
+  def update(expenseSheet: ExpenseSheet): F[Option[ExpenseSheet]]
   def save(expenseSheet: ExpenseSheet): F[Option[ExpenseSheet]]
 }
