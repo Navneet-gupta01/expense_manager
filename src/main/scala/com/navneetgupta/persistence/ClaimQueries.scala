@@ -3,12 +3,15 @@ package com.navneetgupta.persistence
 import com.navneetgupta.ClaimTuple
 import com.navneetgupta.model._
 import doobie.implicits._
+import doobie.postgres.implicits._
 import doobie.util.query.Query0
 import doobie.util.update.Update0
 
 
 object ClaimQueries {
   type ClaimType = String
+
+  import DoobieCustomMapping.implicits._
 
   def insertQuery(claim: Claim): Update0 =
     sql"""INSERT into claims (id, type, employeeid, expenses)

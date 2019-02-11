@@ -8,12 +8,14 @@ import com.navneetgupta.ExpenseSheetTuple
 import com.navneetgupta.model._
 import com.navneetgupta.persistence.ExpenseSheetRepository
 import doobie.implicits._
+import doobie.postgres.implicits._
 import doobie.util.transactor.Transactor
 
 class ExpenseSheetRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends ExpenseSheetRepository.Handler[F] {
 
   import com.navneetgupta.persistence.EmployeeQueries.countEmployeeQuery
   import com.navneetgupta.persistence.ExpenseSheetQueries._
+  import com.navneetgupta.persistence.DoobieCustomMapping.implicits._
 
   override def update(expenseSheet: ExpenseSheet): F[Option[ExpenseSheet]] =
     updateQuery(expenseSheet).run.flatMap(_ => fetchQuery(expenseSheet.id).option.map(expenseSheetFromOptionalTuple)).transact(T)
@@ -45,11 +47,12 @@ class ExpenseSheetRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) exte
 
   override def save(expenseSheet: ExpenseSheet): F[Option[ExpenseSheet]] =
     for {
-      employeeCount <- countEmployeeQuery(expenseSheet).unique
-      expenseSheetCount <- countSheetQuery(expenseSheet).unique
-      insertedOrUpdated <- if(employeeCount === 0L) none[ExpenseSheet]
-      else if(expenseSheetCount===0L) insert(expenseSheet)
-      else update(expenseSheet)
+      employeeCount <- countEmployeeQuery(expenseSheet).unique.transact(T)
+      expenseSheetCount <- countSheetQuery(expenseSheet).unique.transact(T)
+      insertedOrUpdated <-
+        if(employeeCount === 0L) none[ExpenseSheet].pure[F]
+        else if(expenseSheetCount===0L) insert(expenseSheet)
+        else update(expenseSheet)
     } yield insertedOrUpdated
 
 }

@@ -3,12 +3,14 @@ package com.navneetgupta.persistence
 import com.navneetgupta.ExpenseSheetTuple
 import com.navneetgupta.model._
 import doobie.implicits._
+import doobie.postgres.implicits._
 import doobie.util.query.Query0
 import doobie.util.update.Update0
 
 
 object ExpenseSheetQueries {
 
+  import DoobieCustomMapping.implicits._
   type ExpenseSheetType = String
 
   def insertQuery(expenseSheet: ExpenseSheet): Update0 =

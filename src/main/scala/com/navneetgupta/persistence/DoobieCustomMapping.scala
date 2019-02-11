@@ -7,6 +7,7 @@ import io.circe.{Decoder, Encoder, Json}
 import org.postgresql.util.PGobject
 import cats.implicits._
 import io.circe.jawn._, io.circe.syntax._
+import com.navneetgupta.codecs.Codecs.implicits._
 
 object DoobieCustomMapping {
 

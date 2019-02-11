@@ -7,6 +7,7 @@ import com.navneetgupta.model.{Employee, EmployeeId, ExpenseSheet}
 import com.navneetgupta.persistence.{EmployeeQueries, EmployeeRepository}
 import doobie.util.transactor.Transactor
 import doobie.implicits._
+import doobie.postgres.implicits._
 
 class EmployeeRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends EmployeeRepository.Handler[F] {
   import EmployeeQueries._
@@ -20,7 +21,7 @@ class EmployeeRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends 
   override def save(employee: Employee): F[Option[Employee]] =
     insertQuery(employee)
       .withUniqueGeneratedKeys[UUID]("id")
-      .flatMap(fetchQuery(_).option)
+      .flatMap(x => fetchQuery(EmployeeId(x)).option)
       .transact(T)
 
   override def count(expenseSheet: ExpenseSheet): F[Long] =
