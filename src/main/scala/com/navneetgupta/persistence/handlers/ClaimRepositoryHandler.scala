@@ -6,7 +6,7 @@ import com.navneetgupta.persistence.ClaimRepository
 import doobie.util.transactor.Transactor
 import doobie.implicits._
 
-class ClaimRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends ClaimRepository[F]{
+class ClaimRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends ClaimRepository.Handler[F]{
 
   import com.navneetgupta.persistence.ClaimQueries._
 

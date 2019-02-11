@@ -8,7 +8,7 @@ import com.navneetgupta.persistence.{EmployeeQueries, EmployeeRepository}
 import doobie.util.transactor.Transactor
 import doobie.implicits._
 
-class EmployeeRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends EmployeeRepository[F] {
+class EmployeeRepositoryHandler[F[_]: Monad](implicit T: Transactor[F]) extends EmployeeRepository.Handler[F] {
   import EmployeeQueries._
   override def get(id: EmployeeId): F[Option[Employee]] =
     fetchQuery(id)

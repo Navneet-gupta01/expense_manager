@@ -43,3 +43,15 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser",
   "io.circe" %% "circe-literal"
 ).map(_ % circeVersion)
+
+
+val freeioVersion = "0.8.2"
+
+libraryDependencies ++= Seq(
+  "io.frees"        %% "frees-core"          % freeioVersion,
+  "io.frees"        %% "frees-logging"       % freeioVersion,
+  "io.frees"        %% "frees-effects"       % freeioVersion,
+  "io.frees"        %% "frees-cache"         % freeioVersion,
+  "io.frees"        %% "frees-config"        % freeioVersion,
+  "io.frees"        %% "frees-http4s"        % freeioVersion,
+)
