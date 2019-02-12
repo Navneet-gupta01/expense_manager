@@ -8,7 +8,9 @@ import com.navneetgupta.persistence.{EmployeeRepository, ExpenseSheetRepository}
 import com.navneetgupta.errors.ErrorManagement.implicits._
 import freestyle.tagless.effects.error.ErrorM
 import freestyle.tagless.logging.LoggingM
+import freestyle.tagless.module
 
+@module
 trait ServicesHandler[F[_]] {
 
   implicit val M: Monad[F]
@@ -21,11 +23,18 @@ trait ServicesHandler[F[_]] {
     for {
       employee <- employeeRepo.get(employeeid)
       u <- error.either[Employee](employee.toRight(new NoSuchElementException("Invalid Employee Id")))
-      openexpenseSheet <- ExpenseSheet.createOpen(employee.get, expenses.toList)
+      openexpenseSheet <- error.either[OpenExpenseSheet](ExpenseSheet.createOpen(employee.get, expenses.toList).toEither.leftMap(l => new NoSuchElementException(l.mkString_("[", ",", "]"))))
       created <- sheetRepo.save(openexpenseSheet)
       openedExpeseSheet <- error.either[ExpenseSheet](created.toRight(new NoSuchElementException("Unable to open Expense Sheet")))
     } yield created
 
-  def claimExpense(employeeid: EmployeeId, expenses: NonEmptyList[Expense]): F[Option[ExpenseSheet]] = ???
+  def claimExpense(employeeid: EmployeeId, expenses: NonEmptyList[Expense]): F[Option[ExpenseSheet]] =
+    for {
+      employee <- employeeRepo.get(employeeid)
+      u <- error.either[Employee](employee.toRight(new NoSuchElementException("Invalid Employee Id")))
+      claimedExpenseSheet <- error.either[ClaimedExpenseSheet](ExpenseSheet.createClaimed(employee.get, expenses.toList).toEither.leftMap(l => new NoSuchElementException(l.mkString_("[",",","]"))))
+      created <- sheetRepo.save(claimedExpenseSheet)
+    } yield created
 }
-//u <- error.either[AccountEntity](account.toRight(new NoSuchElementException("Invalid User Email")))
+
+
