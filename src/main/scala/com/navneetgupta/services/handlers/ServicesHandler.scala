@@ -1,8 +1,9 @@
 package com.navneetgupta.services.handlers
 
-import cats.{Monad}
+import cats.{ApplicativeError, Monad}
+import cats.implicits._
 import cats.data.NonEmptyList
-import com.navneetgupta.model.{Employee, EmployeeId, Expense, ExpenseSheet}
+import com.navneetgupta.model._
 import com.navneetgupta.persistence.{EmployeeRepository, ExpenseSheetRepository}
 import com.navneetgupta.errors.ErrorManagement.implicits._
 import freestyle.tagless.effects.error.ErrorM
@@ -19,11 +20,11 @@ trait ServicesHandler[F[_]] {
   def openExpense(employeeid: EmployeeId, expenses: NonEmptyList[Expense]): F[Option[ExpenseSheet]] =
     for {
       employee <- employeeRepo.get(employeeid)
-      _ <- error.either[Employee](employee)
-      openexpenseSheet <- ExpenseSheet.createOpen(employee, expenses.toList).orRaiseError
+      u <- error.either[Employee](employee.toRight(new NoSuchElementException("Invalid Employee Id")))
+      openexpenseSheet <- ExpenseSheet.createOpen(employee.get, expenses.toList)
       created <- sheetRepo.save(openexpenseSheet)
+      openedExpeseSheet <- error.either[ExpenseSheet](created.toRight(new NoSuchElementException("Unable to open Expense Sheet")))
     } yield created
-    //ExpenseSheet.createOpen(employee, List[Expense]()).
 
   def claimExpense(employeeid: EmployeeId, expenses: NonEmptyList[Expense]): F[Option[ExpenseSheet]] = ???
 }
