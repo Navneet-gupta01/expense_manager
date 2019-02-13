@@ -22,8 +22,8 @@ trait ServicesHandler[F[_]] {
   def openExpense(employeeid: EmployeeId, expenses: NonEmptyList[Expense]): F[Option[ExpenseSheet]] =
     for {
       employee <- employeeRepo.get(employeeid)
-      u <- error.either[Employee](employee.toRight(new NoSuchElementException("Invalid Employee Id")))
-      openexpenseSheet <- error.either[OpenExpenseSheet](ExpenseSheet.createOpen(employee.get, expenses.toList).toEither.leftMap(l => new NoSuchElementException(l.mkString_("[", ",", "]"))))
+      u <- error.either[Employee](employee.toRight(EntityNotFound("Invalid Employee Id")))
+      openexpenseSheet <- error.either[OpenExpenseSheet](ExpenseSheet.createOpen(employee.get, expenses.toList).toEither.leftMap(l => InvalidInputParams(l.mkString_("[", ",", "]"))))
       created <- sheetRepo.save(openexpenseSheet)
       openedExpeseSheet <- error.either[ExpenseSheet](created.toRight(new NoSuchElementException("Unable to open Expense Sheet")))
     } yield created
@@ -31,10 +31,16 @@ trait ServicesHandler[F[_]] {
   def claimExpense(employeeid: EmployeeId, expenses: NonEmptyList[Expense]): F[Option[ExpenseSheet]] =
     for {
       employee <- employeeRepo.get(employeeid)
-      u <- error.either[Employee](employee.toRight(new NoSuchElementException("Invalid Employee Id")))
-      claimedExpenseSheet <- error.either[ClaimedExpenseSheet](ExpenseSheet.createClaimed(employee.get, expenses.toList).toEither.leftMap(l => new NoSuchElementException(l.mkString_("[",",","]"))))
+      u <- error.either[Employee](employee.toRight(EntityNotFound("Invalid Employee Id")))
+      claimedExpenseSheet <- error.either[ClaimedExpenseSheet](ExpenseSheet.createClaimed(employee.get, expenses.toList).toEither.leftMap(l => InvalidInputParams(l.mkString_("[",",","]"))))
       created <- sheetRepo.save(claimedExpenseSheet)
     } yield created
+
+  def createEmployee(name: String, surname: String): F[Option[Employee]] =
+    for {
+      employee <- error.either[Employee](Employee.employee(name, surname).toEither.leftMap(l => InvalidInputParams(l.mkString_("[",",","]"))))
+      employeeCreated <- employeeRepo.save(employee)
+    } yield employeeCreated
 }
 
 

@@ -55,3 +55,11 @@ libraryDependencies ++= Seq(
   "io.frees"        %% "frees-config"        % freeioVersion,
   "io.frees"        %% "frees-http4s"        % freeioVersion,
 )
+
+val http4sVersion = "0.19.0"
+
+libraryDependencies ++= Seq(
+  "org.http4s"      %% "http4s-blaze-server" % http4sVersion,
+  "org.http4s"      %% "http4s-circe"        % http4sVersion,
+  "org.http4s"      %% "http4s-dsl"          % http4sVersion,
+)
