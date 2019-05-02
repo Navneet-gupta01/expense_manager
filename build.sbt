@@ -29,7 +29,7 @@ libraryDependencies ++= {
     "org.typelevel"   %% "squants"             % "1.4.0",
     "org.tpolecat"    %% "doobie-core"         % doobieVersion,
     "org.tpolecat"    %% "doobie-hikari"       % doobieVersion,
-    "org.tpolecat"    %% "doobie-postgres"     % "0.6.0",
+    "org.tpolecat"    %% "doobie-postgres"     % doobieVersion,
     "org.tpolecat"    %% "doobie-specs2"       % doobieVersion % "test", // Specs2 support for typechecking statements.
     "org.tpolecat"    %% "doobie-scalatest"    % doobieVersion % "test",  // ScalaTest support for typechecking statements,
     "com.olegpy"      %% "meow-mtl"            % "0.2.0"

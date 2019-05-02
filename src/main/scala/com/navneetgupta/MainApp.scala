@@ -2,6 +2,7 @@ package com.navneetgupta
 
 import cats.effect._
 import cats.syntax.functor._
+import com.navneetgupta.errors.HttpErrorHandler
 import com.navneetgupta.model.AppError
 import doobie.util.transactor.Transactor
 import freestyle.tagless.effects.error.implicits._

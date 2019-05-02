@@ -3,6 +3,7 @@ package com.navneetgupta
 import cats.{Monad, MonadError}
 import cats.effect.Effect
 import cats.implicits._
+import com.navneetgupta.errors.{HttpErrorHandler, RoutesHttpErrorHandler}
 import com.navneetgupta.model.{AppError, EntityNotFound, InvalidInputParams}
 import com.navneetgupta.services.handlers.ServicesHandler
 import org.http4s.{HttpRoutes, Response}
